@@ -1,5 +1,6 @@
-require 'the_force/keep_trying'
-require 'the_force/timer'
-require 'the_force/thread_pool'
-
+ROOT = File.join(File.dirname(__FILE__), 'the_force')
+require File.join(ROOT, 'keep_trying')
+require File.join(ROOT, 'thread_pool')
+require File.join(ROOT, 'timer')
+#require File.join(ROOT, 'object_support')
 true

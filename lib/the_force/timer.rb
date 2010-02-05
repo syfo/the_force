@@ -11,6 +11,7 @@ module TheForce
   
     #CRZ - for mixin; expects just a symbol and list of args
     #    - helps solve passing symbol problem
+    ###CRZ - rewrite with module_function? and move send()'ing into self.timer as well...
     def timer(*args, &b); 
       if block_given?
       	Force::Timer.timer(*args, &b)

@@ -1,11 +1,13 @@
+require 'rubygems'
 require 'rake'
+require 'rake/testtask'
 
 include_file_globs = ['README.rdoc', 'LICENSE', 'Rakefile', 'init.rb', '{lib}/**/*']
 exclude_file_globs = []
 
 spec = Gem::Specification.new do |s| 
   s.name              = "the_force"
-  s.version           = '0.0.1'
+  s.version           = '0.0.2'
   s.author            = "Ryan Ziegler"
   s.email             = "info@symbolforce.com"
   s.homepage          = "http://www.symbolforce.com"
@@ -34,5 +36,13 @@ task :clean do
 end
 
 desc 'Default, do nothing'
-task :default do 
+task :default => :test do 
+end
+
+Rake::TestTask.new do |t|
+  t.libs << "lib/the_force/"
+  t.test_files = FileList['test/**/*.rb']
+  t.ruby_opts = ["-r rubygems"]
+  t.verbose = true
+  t.warning = true
 end
