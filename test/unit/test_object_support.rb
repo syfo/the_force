@@ -2,7 +2,14 @@ require 'test/unit'
 begin
   require File.join(File.dirname(__FILE__), '../../lib/the_force/object_support.rb') 
 rescue LoadError
-  require File.expand_path('../../../lib/the_force/keep_trying.rb', __FILE__) 
+  require File.expand_path('../../lib/the_force/object_support.rb', __FILE__) 
+end
+
+begin
+  require 'active_support'
+rescue LoadError
+  puts "There are some special cases under Rails' active_support that we must test, please install the rails gem"
+  raise
 end
 
 class TestObjectSupport < Test::Unit::TestCase
@@ -10,7 +17,6 @@ class TestObjectSupport < Test::Unit::TestCase
     assert_equal "a", "a".if.length
     assert_equal nil, "a".unless.length
   end
-
   
   def test_if_as_blank_slate_when_it_returns_true
     assert_equal "", "".if.empty?
@@ -18,8 +24,7 @@ class TestObjectSupport < Test::Unit::TestCase
   def test_unless_as_blank_slate_when_it_returns_true
     assert_equal nil, "".unless.empty?
   end
-
-  
+    
   def test_if_as_blank_slate_when_it_returns_false
     assert_equal nil, "a".if.empty?
   end
@@ -27,6 +32,20 @@ class TestObjectSupport < Test::Unit::TestCase
     assert_equal "a", "a".unless.nil?
   end
 
+  def test_if_as_blank_slate_when_it_returns_true_with_active_support_blank?
+    assert_equal " ", " ".if.blank?
+  end
+  def test_unless_as_blank_slate_when_it_returns_true_with_active_support_blank?
+    assert_equal nil, " ".unless.blank?
+  end
+
+  def test_if_as_blank_slate_when_it_returns_false_with_active_support_blank?
+    assert_equal nil, "a".if.blank?
+  end
+  def test_unless_as_blank_slate_when_it_returns_false_with_active_support_blank?
+    puts "here: " + "a".unless.blank?
+    assert_equal "a", "a".unless.blank?
+  end
 
   def test_if_with_block_when_it_returns_true
     assert_equal "", "".if {|x| x.empty? }
