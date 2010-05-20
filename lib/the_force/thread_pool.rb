@@ -7,102 +7,50 @@ end
 
 module TheForce
   class ThreadPool
-    class Worker
-      def initialize(thread_queue)
-        @mutex = Mutex.new
-        @cv = ConditionVariable.new
-        @queue = thread_queue
-        @running = true
-        @thread = Thread.new do
-          @mutex.synchronize do
-            while @running
-              @cv.wait(@mutex)
-              block = get_block
-              if block
-                @mutex.unlock
-                block.call
-                @mutex.lock
-                reset_block
-              end
-              @queue << self
-            end
+    def initialize(max_size)
+      @pool = []
+      @max_size = max_size
+      @pool_mutex = Mutex.new
+      @pool_cv = ConditionVariable.new  
+    end
+
+    def dispatch(*args)    
+      Thread.new do
+        # Wait for space in the pool.
+        @pool_mutex.synchronize do
+          while @pool.size >= @max_size          
+            # Sleep until some other thread calls @pool_cv.signal.
+            @pool_cv.wait(@pool_mutex)
+          end
+        end
+
+        @pool << Thread.current
+        begin
+          yield(*args)
+        rescue => e
+          exception(self, e, *args)
+        ensure
+          @pool_mutex.synchronize do
+            # Remove the thread from the pool.
+            @pool.delete(Thread.current)
+            # Signal the next waiting thread that there's a space in the pool.
+            @pool_cv.signal            
           end
         end
       end
-
-      def name
-        @thread.inspect
-      end
-
-      def get_block
-        @block
-      end
-
-      def set_block(block)
-        @mutex.synchronize do
-          raise RuntimeError, "Thread already busy." if @block
-          @block = block
-          # Signal the thread in this class, that there's a job to be done
-          @cv.signal
-        end
-      end
-
-      def reset_block
-        @block = nil
-      end
-
-      def busy?
-        @mutex.synchronize { !@block.nil? }
-      end
-
-      def stop
-        @mutex.synchronize do
-          @running = false
-          @cv.signal
-        end
-        @thread.join
-      end
-    end
-
-    attr_accessor :max_size
-
-    def initialize(max_size = 10)
-      @max_size = max_size
-      @queue = Queue.new
-      @workers = []
-    end
-
-    def size
-      @workers.size
-    end
-
-    def busy?
-      @queue.size < @workers.size
     end
 
     def shutdown
-      @workers.each { |w| w.stop }
-      @workers = []
+      @pool_mutex.synchronize { @pool_cv.wait(@pool_mutex) until @pool.empty? }
     end
 
-    alias :join :shutdown
-
-    def process(block=nil,&blk)
-      block = blk if block_given?
-      worker = get_worker
-      worker.set_block(block)
+    def busy?
+      @pool.length > 0
     end
 
-    private
-
-    def get_worker
-      if !@queue.empty? or @workers.size == @max_size
-        return @queue.pop
-      else
-        worker = Worker.new(@queue)
-        @workers << worker
-        worker
-      end
-    end
+    def exception(thread, exception, *original_args)
+      # Subclass this method to handle an exception within a thread.
+      puts "Exception in thread #{thread}: #{exception}"
+    end  
   end
 end
