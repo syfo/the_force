@@ -1,6 +1,6 @@
 require 'thread'
 begin
-  require 'fasttread'
+  require 'fastthread'
 rescue LoadError
   $stderr.puts "Using the ruby-core thread implementation"
 end
