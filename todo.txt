@@ -1,0 +1,47 @@
+  - make a find_each_and_bulk_save ? combining find in batches and ar extension ?
+
+Image.find_each_and_bulk_save do |image|
+image.original_url = ""
+end
+
+will find a batch of 1000, and save that batch using ar-ext, else just call save normally. 
+
+- def_before and def_after class methods
+- add eigenclass method to Class in the_force
+Kernel#Boolean would be nice
+also, a nil check construct that errors in dev, fails silently in prod
+Enumerator#each_in_a_threadtheIdid
+
+API
+find_each_and_bulk_save
+find_each_and_bulk_save!
+find_in_batches_and_bulk_save
+find_in_batches_and_bulk_save!
+
+- why not bulk update OBVIOUS things like:
+  SQL (0.3ms)   INSERT INTO `base_programs_images` (`image_id`, `base_program_id`) VALUES (6055, 22862)
+  SQL (0.2ms)   INSERT INTO `base_programs_images` (`image_id`, `base_program_id`) VALUES (6056, 22862)
+  SQL (0.1ms)   INSERT INTO `base_programs_images` (`image_id`, `base_program_id`) VALUES (6057, 22862)
+  SQL (0.3ms)   INSERT INTO `base_programs_images` (`image_id`, `base_program_id`) VALUES (6058, 22862)
+  SQL (0.1ms)   INSERT INTO `base_programs_images` (`image_id`, `base_program_id`) VALUES (6059, 22862)
+  SQL (0.1ms)   INSERT INTO `base_programs_images` (`image_id`, `base_program_id`) VALUES (6060, 22862)
+  SQL (0.1ms)   INSERT INTO `base_programs_images` (`image_id`, `base_program_id`) VALUES (6061, 22862)
+  SQL (0.1ms)   INSERT INTO `base_programs_images` (`image_id`, `base_program_id`) VALUES (6062, 22862)
+
+class method using this pattern:
+    def showcard_ftp_prefix(refresh = false)
+      unless @showcard_ftp_prefix or refresh
+        creds = YAML.load_file("#{RAILS_ROOT}/config/feeds_ftp.yml")['showcard_photos'] or raise "showcard_photos not found in feeds_ftp.yml!"
+        @showcard_ftp_prefix = "ftp://#{creds['server']}/#{creds['directory']}/"
+        d "showcard images will be gotten from #{showcard_ftp_prefix}"
+      end
+      @showcard_ftp_prefix
+    end
+
+. rails find extension:
+  you can do 
+    Model.find(:all, :field => nil)
+  but you can't do
+    Model.find(:all, :association => nil)
+however this is possible in one sql statement via a LEFT OUTER JOIN with a WHERE association.id = NULL. You should be able to search associations. can do this by, for example: Alert.find(:all, :joins => "LEFT OUTER JOIN Base_Programs ON base_programs.id = alerts.alertable_id", :conditions => "alerts.alertable_type = 'BaseProgram' and base_programs.id = NULL"). when polymorphic.
+. make for ruby, iff <clause> where result of clause goes into local variable, like $_, etc
