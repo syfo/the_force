@@ -1,9 +1,5 @@
 require 'test/unit'
-begin
-  require File.join(File.dirname(__FILE__), '../../lib/the_force/object_support.rb') 
-rescue LoadError
-  require File.expand_path('../../lib/the_force/object_support.rb', __FILE__) 
-end
+require 'object_support'
 
 begin
   require 'active_support'
