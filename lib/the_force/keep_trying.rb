@@ -1,20 +1,23 @@
-module TheForce; end
-
-begin
-  require 'system_timer'
-  def TheForce.timeout(*args, &b)
-    SystemTimer.timeout_after(*args, &b)
-  end
-rescue LoadError => e
-  puts "WARNING - SystemTimer gem not found...reverting to Timeout::timeout"
-  require 'timeout'
-  def TheForce.timeout(*args, &b)
-    Timeout.timeout(*args, &b)
-  end
-end
-
 #CRZ - :exceptions uses is_a? not instance_of?
 module TheForce
+  class << self
+    attr_accessor :timeout_class
+  end
+
+  if defined? ::SystemTimer
+    @timeout_class = SystemTimer
+  else
+    require 'timeout'
+    @timeout_class = Timeout
+  end
+
+  def TheForce.timeout(*args, &b)
+    case @timeout_class
+    when Timeout then Timeout.timeout(*args, &b)
+    when SystemTimer then SystemTimer.timeout_after(*args, &b)
+    end
+  end
+  
   def keep_trying(options = {}, &b)
     options = {:exceptions => [StandardError], :timeout => false}.merge(options)
     options[:exceptions] = [options[:exceptions]] unless options[:exceptions].is_a? Array
