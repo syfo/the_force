@@ -36,11 +36,12 @@ task :clean do
 end
 
 desc 'Default, do nothing'
-task :default => :test do 
+task :default => :all_tests do 
 end
 
 Rake::TestTask.new do |t|
-  t.libs << "lib/the_force/"
+  t.name = :all_tests
+  t.libs << "lib/the_force"
   t.test_files = FileList['test/**/*.rb']
   t.ruby_opts = ["-r rubygems"]
   t.verbose = true
