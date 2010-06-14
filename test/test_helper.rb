@@ -1,4 +1,5 @@
-require 'active_support/testing/assertions'
+#require 'active_support/testing/assertions'
+
 begin
   require 'redgreen'
 rescue LoadError

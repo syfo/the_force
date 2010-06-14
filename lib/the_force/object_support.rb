@@ -85,5 +85,4 @@ end
 
 class Object
   include TheForce::ObjectSupport::InstanceMethods
-  extend TheForce::ObjectSupport::ClassMethods
 end
