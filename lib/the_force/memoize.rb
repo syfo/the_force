@@ -1,4 +1,5 @@
 #CRZ - any reason to support parameters in the block? would need instance_exec, and maybe some compat instance_exec for pre-1.8.7 rubies...
+#    - for example this one: http://eigenclass.org/hiki/bounded+space+instance_exec
 
 module TheForce
   module ObjectSupport
