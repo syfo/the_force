@@ -1,3 +1,5 @@
+require 'ostruct'
+
 module TheForce
   module RemoteIncludes
     @@remotes = []
