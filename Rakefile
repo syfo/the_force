@@ -7,13 +7,13 @@ exclude_file_globs = []
 
 spec = Gem::Specification.new do |s| 
   s.name              = "the_force"
-  s.version           = '0.1.0'
+  s.version           = '0.2.0'
   s.author            = "Ryan Ziegler"
   s.email             = "info@symbolforce.com"
   s.homepage          = "http://www.symbolforce.com"
   s.platform          = Gem::Platform::RUBY
   s.summary           = "Common code for Symbolforce"
-  s.description       = "Common code for Symbolforce. tests pass in 1.8.6, 1.8.7, 1.9.1, and jruby 1.4"
+  s.description       = "Common code for Symbolforce"
   s.files             = FileList[include_file_globs].to_a - FileList[exclude_file_globs].to_a
   s.require_path      = "lib"
   s.test_files        = FileList["test/**/test_*.rb"].to_a
