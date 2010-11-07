@@ -1,0 +1,7 @@
+Autotest.add_hook(:initialize) do |at|
+  at.add_exception %r{^.git}
+#  at.add_mapping(%r{^lib/.*.rb$}) do |f, _|
+#    Dir['spec/**/*.rb']
+#  end
+  nil
+end

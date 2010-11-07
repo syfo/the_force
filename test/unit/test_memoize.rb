@@ -1,5 +1,4 @@
-require 'test/unit'
-require 'memoize'
+require 'the_force/memoize'
 
 class Memoizer
   def initialize

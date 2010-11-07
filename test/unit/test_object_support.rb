@@ -1,5 +1,4 @@
-require 'test/unit'
-require 'object_support'
+require 'the_force/object_support'
 
 begin
   require 'active_support'

@@ -1,9 +1,4 @@
-require 'test/unit'
-begin
-  require File.join(File.dirname(__FILE__), '../../lib/the_force/keep_trying.rb') 
-rescue LoadError
-  require File.expand_path('../../../lib/the_force/keep_trying.rb', __FILE__) 
-end
+require 'the_force/keep_trying'
 
 class TestKeepTrying < Test::Unit::TestCase
   def test_defaults_to_three_tries

@@ -1,8 +1,8 @@
-require 'test/unit'
-require 'rails_support'
+require 'the_force/rails_support'
+require 'rails'
 
 class TestRailsSupport < Test::Unit::TestCase
-  def test_rails_support
-    assert false
+  def test_collect_column
+    assert false, "PENDING"
   end
 end
