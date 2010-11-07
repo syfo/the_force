@@ -1,5 +1,5 @@
 require 'the_force/rails_support'
-require 'rails'
+#require 'rails'
 
 class TestRailsSupport < Test::Unit::TestCase
   def test_collect_column

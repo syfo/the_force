@@ -44,6 +44,10 @@ class TestKeepTrying < Test::Unit::TestCase
   
   #def test_works_without_systemtimer
   #def test_works_with_systemtimer
+  
+  def test_systemtimer_is_not_loaded_in_19
+    assert false, "PENDING"
+  end
 end
 
 class TestKeepTryingSpecialError < StandardError

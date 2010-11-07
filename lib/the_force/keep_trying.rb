@@ -1,12 +1,16 @@
-module TheForce; end
+require 'the_force/ruby_version'
 
 begin
-  require 'system_timer'
+  require 'system_timer' if TheForce.ruby_version.is18?
+rescue LoadError => e
+  puts "WARNING - SystemTimer gem not found...reverting to Timeout::timeout"
+end
+
+if defined? SystemTimer and TheForce.ruby_version.is18?
   def TheForce.timeout(*args, &b)
     SystemTimer.timeout_after(*args, &b)
   end
-rescue LoadError => e
-  puts "WARNING - SystemTimer gem not found...reverting to Timeout::timeout"
+else
   require 'timeout'
   def TheForce.timeout(*args, &b)
     Timeout.timeout(*args, &b)

@@ -27,6 +27,10 @@ class TestRubyVersion < Test::Unit::TestCase
   def test_is19?
     assert_equal [@v.major, @v.minor] == [1,9], @v.is19?
   end
+
+  def test_is18?
+    assert_equal [@v.major, @v.minor] == [1,8], @v.is18?
+  end
     
   def test_is_frozen
     assert @v.frozen?

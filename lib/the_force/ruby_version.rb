@@ -14,6 +14,10 @@ module TheForce
       [major, minor] == [1,9]
     end
 
+    def v.is18?
+      [major, minor] == [1,8]
+    end
+
     v.freeze
   end
 end

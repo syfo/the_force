@@ -7,7 +7,7 @@ exclude_file_globs = []
 
 spec = Gem::Specification.new do |s| 
   s.name              = "the_force"
-  s.version           = '0.3.2'
+  s.version           = '0.3.3'
   s.author            = "Ryan Ziegler"
   s.email             = "info@symbolforce.com"
   s.homepage          = "http://www.symbolforce.com"
