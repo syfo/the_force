@@ -45,3 +45,51 @@ class method using this pattern:
     Model.find(:all, :association => nil)
 however this is possible in one sql statement via a LEFT OUTER JOIN with a WHERE association.id = NULL. You should be able to search associations. can do this by, for example: Alert.find(:all, :joins => "LEFT OUTER JOIN Base_Programs ON base_programs.id = alerts.alertable_id", :conditions => "alerts.alertable_type = 'BaseProgram' and base_programs.id = NULL"). when polymorphic.
 . make for ruby, iff <clause> where result of clause goes into local variable, like $_, etc
+
+______________________________________
+
+# CRZ - given a name to slug-ize, and either a list or a table and column, make a unique slug
+#     - There's are inherent race conditions here, naturally.
+#     - Should go like "b" -> "b_1"
+# e.g. TheForce.make_unique_slug("My Gallery", Gallery, :permalink)
+# e.g. TheForce.make_unique_slug("My Gallery", ["My_Gallery", "MY GALLERY"])
+# e.g. before_validate 'self.permaslug = TheForce.make_unique_slug self.title, Article, :permaslug'
+# e.g. before_validate 'self.permaslug = TheForce.make_unique_slug self.heading, Section.find_all_by_article_id(self.article.id).map {|s| s.heading}' 
+def self.make_unique_slug(title, *others)
+  arr = others[0].find(:all).map { |e| e.send(others[1]) } if others.length == 2
+  arr = *others if others.length == 1
+  
+  base = title.strip.downcase.gsub(/\s+/, '_').gsub(/[^a-zA-Z0-9_]+/, '')
+  slug, suffix = base, "1"
+  while arr.include?(slug) do
+    suffix.succ!
+    slug = "#{base}_#{suffix}"
+  end
+  slug
+end
+
+______________________________________
+
+module Force
+  class SikhWince
+    
+  end
+end
+
+#Force::SikhWince
+
+#restartable_sequence :name => "lcms import", :restart_from_step => :update_data do
+#  step :fetch_xmls do
+#  end
+#  
+#  step :update_data do
+#  end
+#  
+#  restore_state do
+#    #loading database
+#  end
+#  
+#  save_state do
+#    #saving database
+#  end
+#end
