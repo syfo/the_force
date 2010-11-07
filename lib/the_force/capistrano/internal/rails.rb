@@ -6,6 +6,8 @@
 #    - to deploy on a new box, first cap deploy:setup, then add database.yml on the server in shared, then deploy:cold
 #
 #    - nov 4 - putting capistrano recipe into the_force, use like this
+#         require 'rubygems'
+#         require 'the_force'
 #         require 'the_force/lib/the_force/capistrano/internal/defaults'
 #         set :application, "amie"
 #         set :shared_dirs, %w(public/system log db/sqlite)
