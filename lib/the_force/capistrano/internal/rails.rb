@@ -49,6 +49,11 @@ Capistrano::Configuration.instance(:sf_internal_rails).load do
     task :chowning, :roles => :app do
       run "chown -R apache.apache #{release_path}"
     end
+    
+    desc "init and update submodules"
+    task :fetch_submodules, :roles => :app do
+      run "git submodule update --init"
+    end
   end
 
   namespace :deploy do
@@ -75,6 +80,7 @@ Capistrano::Configuration.instance(:sf_internal_rails).load do
   end
 
   after 'deploy:update_code', 'bundler:bundle_new_release'
+  after 'bundler:bundle_new:release', 'sf:fetch_submodules'
   after 'deploy:finalize_update', 'sf:chowning'
   after 'sf:chowning', 'sf:symlink_shared_files'
   after 'sf:symlink_shared_files', 'sf:symlink_shared_dirs'
