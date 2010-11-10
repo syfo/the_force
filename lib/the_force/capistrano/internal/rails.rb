@@ -52,7 +52,7 @@ Capistrano::Configuration.instance(:sf_internal_rails).load do
     
     desc "init and update submodules"
     task :fetch_submodules, :roles => :app do
-      run "git submodule update --init"
+      run "cd #{release_path} && git submodule update --init"
     end
   end
 
@@ -79,8 +79,9 @@ Capistrano::Configuration.instance(:sf_internal_rails).load do
     end
   end
 
+  ###CRZ - the chowning is not the last thing...some things owned by root, particularly the symlinks.
   after 'deploy:update_code', 'bundler:bundle_new_release'
-  after 'bundler:bundle_new:release', 'sf:fetch_submodules'
+  after 'bundler:bundle_new_release', 'sf:fetch_submodules'
   after 'deploy:finalize_update', 'sf:chowning'
   after 'sf:chowning', 'sf:symlink_shared_files'
   after 'sf:symlink_shared_files', 'sf:symlink_shared_dirs'
