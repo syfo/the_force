@@ -10,6 +10,8 @@ Capistrano::Configuration.instance(:sf_defaults).load do
   set :copy_strategy, :export
   set :user, 'root'
   set :runner, 'root'
+  set :httpd_owner, 'apache'
+  
   #set :deploy_via, :copy
   #shallow clone and non-master branch dont work together, but only git clone --depth 1
   #set :git_shallow_clone, 1

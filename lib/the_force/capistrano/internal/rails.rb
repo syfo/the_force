@@ -47,7 +47,7 @@ Capistrano::Configuration.instance(:sf_internal_rails).load do
   
     desc "set permissions on mastodon"
     task :chowning, :roles => :app do
-      run "chown -R apache.apache #{release_path}"
+      run "chown -R #{httpd_owner}.#{httpd_owner} #{release_path}"
     end
     
     desc "init and update submodules"

@@ -2,11 +2,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{the_force}
-  s.version = "0.3.4"
+  s.version = "0.3.5"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Ryan Ziegler"]
-  s.date = %q{2010-11-10}
+  s.date = %q{2010-12-13}
   s.description = %q{Common code for Symbolforce}
   s.email = %q{info@symbolforce.com}
   s.extra_rdoc_files = ["README.rdoc"]
