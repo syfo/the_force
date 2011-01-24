@@ -1,4 +1,4 @@
-  - make a find_each_and_bulk_save ? combining find in batches and ar extension ?
+ make a find_each_and_bulk_save ? combining find in batches and ar extension ?
 
 Image.find_each_and_bulk_save do |image|
 image.original_url = ""
@@ -28,16 +28,6 @@ find_in_batches_and_bulk_save!
   SQL (0.1ms)   INSERT INTO `base_programs_images` (`image_id`, `base_program_id`) VALUES (6061, 22862)
   SQL (0.1ms)   INSERT INTO `base_programs_images` (`image_id`, `base_program_id`) VALUES (6062, 22862)
 
-class method using this pattern:
-    def showcard_ftp_prefix(refresh = false)
-      unless @showcard_ftp_prefix or refresh
-        creds = YAML.load_file("#{RAILS_ROOT}/config/feeds_ftp.yml")['showcard_photos'] or raise "showcard_photos not found in feeds_ftp.yml!"
-        @showcard_ftp_prefix = "ftp://#{creds['server']}/#{creds['directory']}/"
-        d "showcard images will be gotten from #{showcard_ftp_prefix}"
-      end
-      @showcard_ftp_prefix
-    end
-
 . rails find extension:
   you can do 
     Model.find(:all, :field => nil)
@@ -48,35 +38,7 @@ however this is possible in one sql statement via a LEFT OUTER JOIN with a WHERE
 
 ______________________________________
 
-# CRZ - given a name to slug-ize, and either a list or a table and column, make a unique slug
-#     - There's are inherent race conditions here, naturally.
-#     - Should go like "b" -> "b_1"
-# e.g. TheForce.make_unique_slug("My Gallery", Gallery, :permalink)
-# e.g. TheForce.make_unique_slug("My Gallery", ["My_Gallery", "MY GALLERY"])
-# e.g. before_validate 'self.permaslug = TheForce.make_unique_slug self.title, Article, :permaslug'
-# e.g. before_validate 'self.permaslug = TheForce.make_unique_slug self.heading, Section.find_all_by_article_id(self.article.id).map {|s| s.heading}' 
-def self.make_unique_slug(title, *others)
-  arr = others[0].find(:all).map { |e| e.send(others[1]) } if others.length == 2
-  arr = *others if others.length == 1
-  
-  base = title.strip.downcase.gsub(/\s+/, '_').gsub(/[^a-zA-Z0-9_]+/, '')
-  slug, suffix = base, "1"
-  while arr.include?(slug) do
-    suffix.succ!
-    slug = "#{base}_#{suffix}"
-  end
-  slug
-end
-
-______________________________________
-
-module Force
-  class SikhWince
-    
-  end
-end
-
-#Force::SikhWince
+#TheForce::SikhWince
 
 #restartable_sequence :name => "lcms import", :restart_from_step => :update_data do
 #  step :fetch_xmls do
