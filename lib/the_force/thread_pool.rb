@@ -2,7 +2,8 @@ require 'thread'
 begin
   require 'fastthread'
 rescue LoadError
-  $stderr.puts "Using the ruby-core thread implementation"
+  #CRZ: this error msg is quite annoying
+  #$stderr.puts "Using the ruby-core thread implementation"
 end
 
 module TheForce
@@ -50,7 +51,7 @@ module TheForce
 
     def exception(thread, exception, *original_args)
       # Subclass this method to handle an exception within a thread.
-      puts "Exception in thread #{thread}: #{exception}"
+      puts "Exception in thread #{thread}: #{exception}\n  #{exception.backtrace.join("\n  ")}"
     end  
   end
 end
